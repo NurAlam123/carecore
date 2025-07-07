@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+@theme {
+  --font-railway: var(--font-railway);
+}
+
 :root {
   --background: #ffffff;
   --foreground: #171717;

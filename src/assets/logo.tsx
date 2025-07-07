@@ -1,0 +1,22 @@
+const Logo = () => {
+  return (
+    <svg
+      width="80"
+      height="80"
+      viewBox="0 0 80 80"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M40 20C30 20 24 30 24 38C24 52 40 60 40 60C40 60 56 52 56 38C56 30 50 20 40 20Z"
+        fill="none"
+        stroke="#22D3EE"
+        stroke-width="2"
+      />
+      <rect x="38" y="32" width="4" height="16" rx="2" fill="#F8FAFC" />
+      <rect x="32" y="38" width="16" height="4" rx="2" fill="#F8FAFC" />
+    </svg>
+  );
+};
+
+export default Logo;
