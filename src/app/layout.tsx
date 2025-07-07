@@ -15,7 +15,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${railway.variable} antialiased font font-railway`}>
+      <body className={`${railway.variable} antialiased font-railway`}>
         {children}
       </body>
     </html>
