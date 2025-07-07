@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { railway } from "@/fonts";
 
 import "./globals.css";
+import { ThemeProvider } from "@/providers/ThemeProvider";
 
 export const metadata: Metadata = {
   title: "CareCore",
@@ -14,9 +15,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${railway.variable} antialiased font-railway`}>
-        {children}
+    <html lang="en" suppressHydrationWarning>
+      <body
+        className={`${railway.variable} antialiased font-railway dark:bg-black`}
+      >
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="dark"
+          enableSystem
+          disableTransitionOnChange
+        >
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );
