@@ -16,8 +16,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <meta name="apple-mobile-web-app-title" content="CareCore" />
+      </head>
       <body
-        className={`${railway.variable} antialiased font-railway dark:bg-black`}
+        className={`${railway.variable} antialiased font-railway bg-[#1f1f1f]`}
       >
         <ThemeProvider
           attribute="class"
