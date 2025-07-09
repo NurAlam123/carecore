@@ -1,6 +1,8 @@
 "use client";
 
 import { FormFieldTypes } from "../forms/PatientForm";
+import { FieldValues } from "@/schemas/formSchema";
+
 import {
   FormControl,
   FormField,
@@ -16,7 +18,6 @@ import Image from "next/image";
 
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
-import { FieldValues } from "@/schemas/formSchema";
 
 interface Props {
   control: Control<FieldValues>;
@@ -108,7 +109,7 @@ CustomFormField.Input = function CustomFormFieldInput({
             country={"us"}
             placeholder={placeholder}
             inputClass="input-phone-input"
-            value={field.value as string | undefined}
+            value={field.value || undefined}
             onChange={field.onChange}
           />
         </FormControl>

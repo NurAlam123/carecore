@@ -9,6 +9,7 @@ import SubmitButton from "./SubmitButton";
 import { useState } from "react";
 import { FieldValues, formSchema } from "@/schemas/formSchema";
 import { useRouter } from "next/navigation";
+import { createUser } from "@/lib/actions/patient.action";
 
 export enum FormFieldTypes {
   INPUT = "input",
@@ -34,14 +35,13 @@ const PatientForm = () => {
     },
   });
 
-  async function onSubmit({ name, phone, email }: FieldValues) {
+  async function onSubmit(userData: FieldValues) {
     setIsLoading(true);
 
     try {
-      const userData = { name, email, phone };
-      // const user = await createuser(userData);
+      const user = await createUser(userData);
 
-      // if (user) router.push("/patients/${user.$id}/register");
+      if (user) router.push("/patients/${user.$id}/register");
     } catch (error) {
       console.error(error);
     }
