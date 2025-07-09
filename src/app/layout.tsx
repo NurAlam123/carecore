@@ -19,13 +19,10 @@ export default function RootLayout({
       <head>
         <meta name="apple-mobile-web-app-title" content="CareCore" />
       </head>
-      <body
-        className={`${railway.variable} antialiased font-railway bg-[#1f1f1f]`}
-      >
+      <body className={`${railway.variable} antialiased font-railway`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"
-          enableSystem
           disableTransitionOnChange
         >
           {children}

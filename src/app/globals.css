@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
   --font-family-railway: "Railway", sans-serif;
   --container-center: true;
@@ -125,6 +127,11 @@
   --chart-3: 30 80% 55%;
   --chart-4: 280 65% 60%;
   --chart-5: 340 75% 55%;
+}
+
+body {
+  background: var(--color-dark-400);
+  color: var(--foreground);
 }
 
 /* Remove scrollbar */
@@ -295,7 +302,7 @@
 
   /* ===== CUSTOM COMPONENT UTILITIES */
   .shad-primary-btn {
-    @apply bg-green-500 text-white hover:bg-green-600;
+    @apply bg-green-500 text-white hover:bg-green-500/70;
   }
 
   .shad-danger-btn {
@@ -383,6 +390,10 @@
     @apply mt-2 h-11 rounded-md px-3 text-sm border bg-dark-400 placeholder:text-dark-600 border-dark-500;
   }
 
+  .input-phone-input {
+    @apply !bg-dark-400 !outline-none !ml-1 !text-sm !font-medium !w-full !border-dark-500 placeholder:!text-dark-600 placeholder:!font-normal;
+  }
+
   /* =====  REACT DATE PICKER OVERRIDES */
   .date-picker {
     @apply overflow-hidden border-transparent w-full placeholder:text-dark-600 h-11 text-medium-[14] rounded-md px-3 outline-none;
@@ -449,14 +460,35 @@
 }
 
 /* =====  REACT PHONE NUMBER INPUT OVERRIDES */
-.PhoneInputInput {
-  outline: none;
-  margin-left: 4px;
-  background: #1a1d21;
-  font-size: 14px;
-  font-weight: 500;
-}
-
 .PhoneInputInput::placeholder {
   color: #76828d;
+}
+.react-tel-input .form-control {
+  width: 100% !important;
+}
+
+.react-tel-input .flag-dropdown {
+  background: var(--color-dark-400) !important;
+  border: 1px solid var(--color-dark-500) !important;
+  outline: none !important;
+  border-top-left-radius: 4px !important;
+  border-bottom-left-radius: 4px !important;
+}
+
+.selected-flag {
+  background: var(--color-dark-400) !important;
+}
+
+.country-list {
+  background: var(--color-dark-400) !important;
+  border: 1px solid var(--color-dark-500);
+  border-radius: 8px !important;
+}
+
+.highlight {
+  background-color: var(--color-dark-200) !important;
+}
+
+.country:hover {
+  background-color: var(--color-dark-300) !important;
 }
