@@ -18,20 +18,13 @@ const UserRegisterPage = async ({ params }: Props) => {
 
   return (
     <div className="flex h-screen max-h-screen">
-      <section className="remove-scrollbar container my-auto">
-        <div className="sub-container max-w-[496px]">
+      <section className="remove-scrollbar container">
+        <div className="sub-container max-w-[860px] flex-1 flex-col py-10">
           <Logo />
 
           <RegisterForm user={user} />
 
-          <div className="text-regular-[14] mt-20 flex justify-between">
-            <p className="justify-items-center text-dark-600 xl:text-left">
-              &copy; 2025 CareCore
-            </p>
-            <Link href="/?admin=true" className="text-green-500">
-              Admin
-            </Link>
-          </div>
+          <p className="copyright py-10">&copy; 2025 CareCore</p>
         </div>
       </section>
 

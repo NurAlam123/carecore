@@ -1,6 +1,15 @@
 "use server";
 
-import { Client, Databases, Messaging, Storage, Users } from "node-appwrite";
+import {
+  Client,
+  Databases,
+  ID,
+  Messaging,
+  Models,
+  Storage,
+  Users,
+} from "node-appwrite";
+
 import { parseStringify } from "./utils";
 
 export async function createAdminClient() {
@@ -34,4 +43,35 @@ export const getUser = async (userID: string) => {
   } catch (error) {
     console.error(error);
   }
+};
+
+export const createDocument = async (data: Partial<Models.Document>) => {
+  const { database } = await createAdminClient();
+
+  const document = await database.createDocument(
+    process.env.DATABASE_ID!,
+    process.env.PATIENT_COLLECTION_ID!,
+    ID.unique(),
+    data,
+  );
+
+  return document;
+};
+
+export const uploadFileStorage = async (inputFile: File) => {
+  const { storage } = await createAdminClient();
+
+  const file = await storage.createFile(
+    process.env.NEXT_PUBLIC_BUCKET_ID!,
+    ID.unique(),
+    inputFile,
+  );
+
+  return {
+    file_id: file.$id,
+    file,
+    url: file.$id
+      ? `${process.env.NEXT_PUBLIC_ENDPOINT}/storage/buckets/${process.env.NEXT_PUBLIC_BUCKET_ID!}/files/${file.$id}/view??project=${process.env.APPWRITE_PROJECT_ID}`
+      : null,
+  };
 };

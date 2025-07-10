@@ -1,8 +1,3 @@
-"use client";
-
-import { FormFieldTypes } from "../forms/PatientForm";
-import { FieldValues } from "@/schemas/formSchema";
-
 import {
   FormControl,
   FormField,
@@ -10,15 +5,16 @@ import {
   FormLabel,
   FormMessage,
 } from "../ui/form";
-
-import { Control, ControllerRenderProps } from "react-hook-form";
-
+import {
+  Control,
+  ControllerRenderProps,
+  FieldValues,
+  Path,
+} from "react-hook-form";
 import { Input } from "../ui/input";
 import Image from "next/image";
-
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
-
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import {
@@ -28,11 +24,14 @@ import {
   SelectValue,
 } from "../ui/select";
 import { Textarea } from "../ui/textarea";
+import { Checkbox } from "../ui/checkbox";
+import { CheckedState } from "@radix-ui/react-checkbox";
+import { FormFieldTypes } from "@/constants";
 
-interface Props {
-  control: Control<FieldValues>;
+interface Props<TFieldValues extends FieldValues = FieldValues> {
+  control: Control<TFieldValues>;
   fieldType: FormFieldTypes;
-  name: keyof FieldValues;
+  name: keyof TFieldValues;
   label?: string;
   placeholder?: string;
   iconSrc?: string;
@@ -42,38 +41,25 @@ interface Props {
   showTimeSelect?: boolean;
   children?: React.ReactNode;
   renderSkeleton?: (
-    field: ControllerRenderProps<FieldValues>,
+    field: ControllerRenderProps<TFieldValues>,
   ) => React.ReactNode;
 }
 
-const CustomFormField = (props: Props) => {
-  const {
-    control,
-    fieldType,
-    name,
-    label,
-    // iconAlt,
-    // iconSrc,
-    // placeholder,
-    // children,
-    // disabled,
-    // dateFormat,
-    // renderSkeleton,
-    // showTimeSelect,
-  } = props;
+const CustomFormField = <TFieldValues extends FieldValues = FieldValues>(
+  props: Props<TFieldValues>,
+) => {
+  const { control, fieldType, name, label } = props;
 
   return (
     <FormField
       control={control}
-      name={name}
+      name={name as Path<TFieldValues>}
       render={({ field }) => (
         <FormItem className="flex-1">
           {fieldType !== FormFieldTypes.CHECKBOX && label && (
             <FormLabel>{label}</FormLabel>
           )}
-
           <CustomFormField.Input field={field} props={props} />
-
           <FormMessage className="shad-error" />
         </FormItem>
       )}
@@ -81,12 +67,14 @@ const CustomFormField = (props: Props) => {
   );
 };
 
-CustomFormField.Input = function CustomFormFieldInput({
+CustomFormField.Input = function CustomFormFieldInput<
+  TFieldValues extends FieldValues,
+>({
   field,
   props,
 }: {
-  field: ControllerRenderProps<FieldValues>;
-  props: Props;
+  field: ControllerRenderProps<TFieldValues>;
+  props: Props<TFieldValues>;
 }) {
   const {
     iconSrc,
@@ -112,7 +100,6 @@ CustomFormField.Input = function CustomFormFieldInput({
               draggable="false"
             />
           )}
-
           <FormControl>
             <Input
               placeholder={placeholder}
@@ -159,7 +146,6 @@ CustomFormField.Input = function CustomFormFieldInput({
       );
     case FormFieldTypes.SKELETON:
       return renderSkeleton ? renderSkeleton(field) : null;
-
     case FormFieldTypes.SELECT:
       return (
         <FormControl>
@@ -175,7 +161,6 @@ CustomFormField.Input = function CustomFormFieldInput({
           </Select>
         </FormControl>
       );
-
     case FormFieldTypes.TEXTAREA:
       return (
         <FormControl>
@@ -187,8 +172,23 @@ CustomFormField.Input = function CustomFormFieldInput({
           />
         </FormControl>
       );
+    case FormFieldTypes.CHECKBOX:
+      return (
+        <FormControl>
+          <div className="flex items-center gap-4">
+            <Checkbox
+              id={props.name as string}
+              checked={field.value as CheckedState}
+              onCheckedChange={field.onChange}
+            />
+            <label htmlFor={props.name as string} className="checkbox-label">
+              {props.label}
+            </label>
+          </div>
+        </FormControl>
+      );
     default:
-      break;
+      return null;
   }
 };
 

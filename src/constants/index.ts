@@ -1,29 +1,40 @@
+import { RegisterFieldValues } from "@/schemas/RegisterFormSchema";
+
+export enum FormFieldTypes {
+  INPUT = "input",
+  PHONE_INPUT = "phoneInput",
+  TEXTAREA = "textarea",
+  CHECKBOX = "checkbox",
+  DATE_PICKER = "datePicker",
+  SELECT = "select",
+  SKELETON = "skeleton",
+}
+
 export const GenderOptions = ["Male", "Female", "Other"];
 
-export const PatientFormDefaultValues = {
-  firstName: "",
-  lastName: "",
+export const PatientFormDefaultValues: Partial<RegisterFieldValues> = {
+  name: "",
   email: "",
   phone: "",
-  birthDate: new Date(Date.now()),
-  gender: "Male" as Gender,
+  birth_date: undefined,
+  gender: undefined,
   address: "",
   occupation: "",
-  emergencyContactName: "",
-  emergencyContactNumber: "",
-  primaryPhysician: "",
-  insuranceProvider: "",
-  insurancePolicyNumber: "",
+  emergency_contact_name: "",
+  emergency_contact_number: "",
+  primary_physician: "",
+  insurance_provider: "",
+  insurance_policy_number: "",
   allergies: "",
-  currentMedication: "",
-  familyMedicalHistory: "",
-  pastMedicalHistory: "",
-  identificationType: "Birth Certificate",
-  identificationNumber: "",
-  identificationDocument: [],
-  treatmentConsent: false,
-  disclosureConsent: false,
-  privacyConsent: false,
+  current_medication: "",
+  family_medical_history: "",
+  past_medical_history: "",
+  identification_type: "",
+  identification_number: "",
+  identification_document: [],
+  treatment_consent: false,
+  disclosure_consent: false,
+  privacy_consent: false,
 };
 
 export const IdentificationTypes = [

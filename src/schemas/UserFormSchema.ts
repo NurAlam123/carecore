@@ -4,7 +4,7 @@ const phoneRegex = new RegExp(
   /^([+]?[\s0-9]+)?(\d{3}|[(]?[0-9]+[)])?([-]?[\s]?[0-9])+$/,
 );
 
-export const formSchema = z.object({
+export const UserFormSchema = z.object({
   name: z
     .string()
     .min(2, {
@@ -21,4 +21,4 @@ export const formSchema = z.object({
   }),
 });
 
-export type FieldValues = z.infer<typeof formSchema>;
+export type UserFieldValues = z.infer<typeof UserFormSchema>;

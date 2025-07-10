@@ -7,15 +7,24 @@ import { Form, FormControl } from "@/components/ui/form";
 import CustomFormField from "../forms/CustomFormField";
 import SubmitButton from "./SubmitButton";
 import { useState } from "react";
-import { FieldValues, formSchema } from "@/schemas/formSchema";
 import { useRouter } from "next/navigation";
-import { createUser } from "@/lib/actions/patient.action";
-import { FormFieldTypes } from "./PatientForm";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
-import { Doctors, GenderOptions, IdentificationTypes } from "@/constants";
+import {
+  Doctors,
+  FormFieldTypes,
+  GenderOptions,
+  IdentificationTypes,
+  PatientFormDefaultValues,
+} from "@/constants";
 import { Label } from "../ui/label";
 import { SelectItem } from "../ui/select";
 import Image from "next/image";
+import FileUploader from "../FileUploader";
+import {
+  RegisterFieldValues,
+  RegisterFormSchema,
+} from "@/schemas/RegisterFormSchema";
+import { registerPatient } from "@/lib/actions/patient.action";
 
 interface Props {
   user: User;
@@ -26,26 +35,73 @@ const RegisterForm = ({ user }: Props) => {
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const form = useForm<FieldValues>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<RegisterFieldValues>({
+    resolver: zodResolver(RegisterFormSchema),
     defaultValues: {
+      ...PatientFormDefaultValues,
       name: "",
       email: "",
       phone: "",
     },
   });
 
-  async function onSubmit(userData: FieldValues) {
+  const onSubmit = async (values: RegisterFieldValues) => {
     setIsLoading(true);
 
-    try {
-      const user = await createUser(userData);
+    let formData;
+    if (
+      values.identification_document &&
+      values.identification_document?.length > 0
+    ) {
+      const blobFile = new Blob([values.identification_document[0]], {
+        type: values.identification_document[0].type,
+      });
 
-      if (user) router.push("/patients/${user.$id}/register");
+      formData = new FormData();
+      formData.append("blobFile", blobFile);
+      formData.append("fileName", values.identification_document[0].name);
+    }
+
+    try {
+      const patient = {
+        user_id: user.$id,
+        name: values.name,
+        email: values.email,
+        phone: values.phone,
+        birth_date: new Date(values.birth_date),
+        gender: values.gender,
+        address: values.address,
+        occupation: values.occupation,
+        emergency_contact_name: values.emergency_contact_name,
+        emergency_contact_number: values.emergency_contact_number,
+        primary_physician: values.primary_physician,
+        insurance_provider: values.insurance_provider,
+        insurance_policy_number: values.insurance_policy_number,
+        allergies: values.allergies,
+        current_medication: values.current_medication,
+        family_medical_history: values.family_medical_history,
+        past_medical_history: values.past_medical_history,
+        identification_type: values.identification_type,
+        identification_number: values.identification_number,
+        identification_document: values.identification_document
+          ? formData
+          : undefined,
+        privacy_consent: values.privacy_consent,
+        treatment_consent: values.treatment_consent,
+        disclosure_consent: values.disclosure_consent,
+      } satisfies RegisterUserParams;
+
+      const newPatient = await registerPatient(patient);
+
+      if (newPatient) {
+        router.push(`/patients/${user.$id}/new-appointment`);
+      }
     } catch (error) {
       console.error(error);
     }
-  }
+
+    setIsLoading(false);
+  };
 
   return (
     <Form {...form}>
@@ -105,7 +161,7 @@ const RegisterForm = ({ user }: Props) => {
                 <RadioGroup
                   className="flex h-11 gap-6 xl:justify-between"
                   onValueChange={field.onChange}
-                  defaultValue={field.value}
+                  defaultValue={field.value as string}
                 >
                   {GenderOptions.map((option) => (
                     <div key={option} className="radio-group cursor-pointer">
@@ -142,7 +198,7 @@ const RegisterForm = ({ user }: Props) => {
           <CustomFormField
             control={form.control}
             fieldType={FormFieldTypes.INPUT}
-            name="emergency_contact"
+            name="emergency_contact_name"
             label="Emergency Contact Name"
             placeholder="Guardian's Name"
           />
@@ -231,11 +287,79 @@ const RegisterForm = ({ user }: Props) => {
             <CustomFormField
               fieldType={FormFieldTypes.TEXTAREA}
               control={form.control}
-              name="pastMedical_history"
+              name="past_medical_history"
               label="Past medical history"
               placeholder="Appendectomy in 2015, Asthma diagnosis in childhood"
             />
           </div>
+        </section>
+
+        <section className="space-y-6">
+          <RegisterForm.SectionTitle title="Identification and Verification" />
+
+          <CustomFormField
+            control={form.control}
+            fieldType={FormFieldTypes.SELECT}
+            name="identification_type"
+            placeholder="Select an identification type"
+            label="Identification Type"
+          >
+            {IdentificationTypes.map((type) => (
+              <SelectItem key={type} value={type}>
+                {type}
+              </SelectItem>
+            ))}
+          </CustomFormField>
+
+          <CustomFormField
+            fieldType={FormFieldTypes.INPUT}
+            control={form.control}
+            name="identification_number"
+            label="Identification Number"
+            placeholder="123456789"
+          />
+
+          <CustomFormField
+            fieldType={FormFieldTypes.SKELETON}
+            control={form.control}
+            name="identification_document"
+            label="Scanned Copy of Identification Document"
+            renderSkeleton={(field) => (
+              <FormControl>
+                <FileUploader
+                  files={field.value as File[]}
+                  onChangeAction={field.onChange}
+                />
+              </FormControl>
+            )}
+          />
+        </section>
+
+        <section className="space-y-6">
+          <RegisterForm.SectionTitle title="Consent and Privacy" />
+
+          <CustomFormField
+            fieldType={FormFieldTypes.CHECKBOX}
+            control={form.control}
+            name="treatment_consent"
+            label="I consent to receive treatment for my health condition."
+          />
+
+          <CustomFormField
+            fieldType={FormFieldTypes.CHECKBOX}
+            control={form.control}
+            name="disclosure_consent"
+            label="I consent to the use and disclosure of my health
+            information for treatment purposes."
+          />
+
+          <CustomFormField
+            fieldType={FormFieldTypes.CHECKBOX}
+            control={form.control}
+            name="privacy_consent"
+            label="I acknowledge that I have reviewed and agree to the
+            privacy policy"
+          />
         </section>
 
         <SubmitButton isLoading={isLoading}>Get Started</SubmitButton>
@@ -250,7 +374,7 @@ RegisterForm.SectionTitle = function FormSectionTitle({
   title: string;
 }) {
   return (
-    <div className="mb-9 space-y-1">
+    <div className="mb-6 space-y-1">
       <h2 className="sub-header">{title}</h2>
     </div>
   );

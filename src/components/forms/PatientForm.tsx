@@ -7,35 +7,22 @@ import { Form } from "@/components/ui/form";
 import CustomFormField from "../forms/CustomFormField";
 import SubmitButton from "./SubmitButton";
 import { useState } from "react";
-import { FieldValues, formSchema } from "@/schemas/formSchema";
 import { useRouter } from "next/navigation";
 import { createUser } from "@/lib/actions/patient.action";
-
-export enum FormFieldTypes {
-  INPUT = "input",
-  PHONE_INPUT = "phoneInput",
-  TEXTAREA = "textarea",
-  CHECKBOX = "checkbox",
-  DATE_PICKER = "datePicker",
-  SELECT = "select",
-  SKELETON = "skeleton",
-}
+import { FormFieldTypes, PatientFormDefaultValues } from "@/constants";
+import { UserFieldValues, UserFormSchema } from "@/schemas/UserFormSchema";
 
 const PatientForm = () => {
   const router = useRouter();
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const form = useForm<FieldValues>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      name: "",
-      email: "",
-      phone: "",
-    },
+  const form = useForm<UserFieldValues>({
+    resolver: zodResolver(UserFormSchema),
+    defaultValues: PatientFormDefaultValues,
   });
 
-  async function onSubmit(userData: FieldValues) {
+  async function onSubmit(userData: UserFieldValues) {
     setIsLoading(true);
 
     try {

@@ -1,5 +1,3 @@
- 
-
 declare type SearchParamProps = {
   params: { [key: string]: string };
   searchParams: { [key: string]: string | string[] | undefined };
@@ -18,30 +16,32 @@ declare interface User extends CreateUserParams {
 }
 
 declare interface RegisterUserParams extends CreateUserParams {
-  userId: string;
-  birthDate: Date;
+  user_id: string;
+  birth_date: Date;
   gender: Gender;
   address: string;
   occupation: string;
-  emergencyContactName: string;
-  emergencyContactNumber: string;
-  primaryPhysician: string;
-  insuranceProvider: string;
-  insurancePolicyNumber: string;
+  emergency_contact_name: string;
+  emergency_contact_number: string;
+  primary_physician: string;
+  insurance_provider: string;
+  insurance_policy_number: string;
   allergies: string | undefined;
-  currentMedication: string | undefined;
-  familyMedicalHistory: string | undefined;
-  pastMedicalHistory: string | undefined;
-  identificationType: string | undefined;
-  identificationNumber: string | undefined;
-  identificationDocument: FormData | undefined;
-  privacyConsent: boolean;
+  current_medication: string | undefined;
+  family_medical_history: string | undefined;
+  past_medical_history: string | undefined;
+  identification_type: string | undefined;
+  identification_number: string | undefined;
+  identification_document: FormData | undefined;
+  privacy_consent: boolean;
+  treatment_consent: boolean;
+  disclosure_consent: boolean;
 }
 
 declare type CreateAppointmentParams = {
-  userId: string;
+  user_id: string;
   patient: string;
-  primaryPhysician: string;
+  primary_physician: string;
   reason: string;
   schedule: Date;
   status: Status;
@@ -49,8 +49,8 @@ declare type CreateAppointmentParams = {
 };
 
 declare type UpdateAppointmentParams = {
-  appointmentId: string;
-  userId: string;
+  appointment_id: string;
+  user_id: string;
   appointment: Appointment;
   type: string;
 };
