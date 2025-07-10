@@ -21,6 +21,13 @@ import "react-phone-input-2/lib/style.css";
 
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import {
+  Select,
+  SelectContent,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
+import { Textarea } from "../ui/textarea";
 
 interface Props {
   control: Control<FieldValues>;
@@ -88,6 +95,7 @@ CustomFormField.Input = function CustomFormFieldInput({
     placeholder,
     showTimeSelect,
     dateFormat,
+    renderSkeleton,
   } = props;
 
   switch (fieldType) {
@@ -150,7 +158,35 @@ CustomFormField.Input = function CustomFormFieldInput({
         </div>
       );
     case FormFieldTypes.SKELETON:
-      return <div></div>;
+      return renderSkeleton ? renderSkeleton(field) : null;
+
+    case FormFieldTypes.SELECT:
+      return (
+        <FormControl>
+          <Select onValueChange={field.onChange} defaultValue={field.value}>
+            <FormControl>
+              <SelectTrigger className="shad-select-trigger">
+                <SelectValue placeholder={placeholder} />
+              </SelectTrigger>
+            </FormControl>
+            <SelectContent className="shad-select-content">
+              {props.children}
+            </SelectContent>
+          </Select>
+        </FormControl>
+      );
+
+    case FormFieldTypes.TEXTAREA:
+      return (
+        <FormControl>
+          <Textarea
+            placeholder={props.placeholder}
+            {...field}
+            className="shad-textArea"
+            disabled={props.disabled}
+          />
+        </FormControl>
+      );
     default:
       break;
   }

@@ -12,8 +12,10 @@ import { useRouter } from "next/navigation";
 import { createUser } from "@/lib/actions/patient.action";
 import { FormFieldTypes } from "./PatientForm";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
-import { GenderOptions } from "@/constants";
+import { Doctors, GenderOptions, IdentificationTypes } from "@/constants";
 import { Label } from "../ui/label";
+import { SelectItem } from "../ui/select";
+import Image from "next/image";
 
 interface Props {
   user: User;
@@ -53,11 +55,7 @@ const RegisterForm = ({ user }: Props) => {
           <p className="text-dark-700">Let us know more about yourself.</p>
         </section>
 
-        <section>
-          <div className="mb-9 space-y-1">
-            <h2 className="sub-header">Personal Information</h2>
-          </div>
-        </section>
+        <RegisterForm.SectionTitle title="Personal Information" />
 
         <CustomFormField
           control={form.control}
@@ -110,7 +108,7 @@ const RegisterForm = ({ user }: Props) => {
                   defaultValue={field.value}
                 >
                   {GenderOptions.map((option) => (
-                    <div key={option} className="radio-group">
+                    <div key={option} className="radio-group cursor-pointer">
                       <RadioGroupItem value={option} id={option} />
                       <Label htmlFor={option} className="cursor-pointer">
                         {option}
@@ -122,13 +120,139 @@ const RegisterForm = ({ user }: Props) => {
             )}
           />
         </RadioGroup>
-        <div className="flex flex-col gap-6 xl:flex-row"></div>
-        <div className="flex flex-col gap-6 xl:flex-row"></div>
-        <div className="flex flex-col gap-6 xl:flex-row"></div>
+        <div className="flex flex-col gap-6 xl:flex-row">
+          <CustomFormField
+            control={form.control}
+            fieldType={FormFieldTypes.INPUT}
+            name="address"
+            label="Address"
+            placeholder="14th Street, New York"
+          />
+
+          <CustomFormField
+            control={form.control}
+            fieldType={FormFieldTypes.INPUT}
+            name="occupation"
+            placeholder="Software Engineer"
+            label="Occupation"
+          />
+        </div>
+
+        <div className="flex flex-col gap-6 xl:flex-row">
+          <CustomFormField
+            control={form.control}
+            fieldType={FormFieldTypes.INPUT}
+            name="emergency_contact"
+            label="Emergency Contact Name"
+            placeholder="Guardian's Name"
+          />
+
+          <CustomFormField
+            control={form.control}
+            fieldType={FormFieldTypes.PHONE_INPUT}
+            name="emergency_contact_number"
+            placeholder="Software Engineer"
+            label="Emergency Contact Number"
+          />
+        </div>
+
+        <section className="space-y-6">
+          <RegisterForm.SectionTitle title="Medical Information" />
+
+          <CustomFormField
+            control={form.control}
+            fieldType={FormFieldTypes.SELECT}
+            name="primary_physician"
+            placeholder="Select a physician"
+            label="Primary Physician"
+          >
+            {Doctors.map((doctor) => (
+              <SelectItem key={doctor.name} value={doctor.name}>
+                <div className="flex cursor-pointer items-center gap-2">
+                  <Image
+                    src={doctor.image}
+                    alt="Doctor"
+                    width={32}
+                    height={32}
+                    draggable="false"
+                    className="rounded-full border border-dark-500 aspect-square select-none"
+                  />
+                  <p>{doctor.name}</p>
+                </div>
+              </SelectItem>
+            ))}
+          </CustomFormField>
+
+          <div className="flex flex-col gap-6 xl:flex-row">
+            <CustomFormField
+              fieldType={FormFieldTypes.INPUT}
+              control={form.control}
+              name="insurance_provider"
+              label="Insurance provider"
+              placeholder="BlueCross BlueShield"
+            />
+
+            <CustomFormField
+              fieldType={FormFieldTypes.INPUT}
+              control={form.control}
+              name="insurance_policy_number"
+              label="Insurance policy number"
+              placeholder="ABC123456789"
+            />
+          </div>
+
+          <div className="flex flex-col gap-6 xl:flex-row">
+            <CustomFormField
+              fieldType={FormFieldTypes.TEXTAREA}
+              control={form.control}
+              name="allergies"
+              label="Allergies (if any)"
+              placeholder="Peanuts, Penicillin, Pollen"
+            />
+
+            <CustomFormField
+              fieldType={FormFieldTypes.TEXTAREA}
+              control={form.control}
+              name="current_medication"
+              label="Current medications"
+              placeholder="Ibuprofen 200mg, Levothyroxine 50mcg"
+            />
+          </div>
+
+          <div className="flex flex-col gap-6 xl:flex-row">
+            <CustomFormField
+              fieldType={FormFieldTypes.TEXTAREA}
+              control={form.control}
+              name="family_medical_history"
+              label=" Family medical history (if relevant)"
+              placeholder="Mother had brain cancer, Father has hypertension"
+            />
+
+            <CustomFormField
+              fieldType={FormFieldTypes.TEXTAREA}
+              control={form.control}
+              name="pastMedical_history"
+              label="Past medical history"
+              placeholder="Appendectomy in 2015, Asthma diagnosis in childhood"
+            />
+          </div>
+        </section>
 
         <SubmitButton isLoading={isLoading}>Get Started</SubmitButton>
       </form>
     </Form>
+  );
+};
+
+RegisterForm.SectionTitle = function FormSectionTitle({
+  title,
+}: {
+  title: string;
+}) {
+  return (
+    <div className="mb-9 space-y-1">
+      <h2 className="sub-header">{title}</h2>
+    </div>
   );
 };
 
