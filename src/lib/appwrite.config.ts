@@ -1,6 +1,7 @@
 "use server";
 
 import { Client, Databases, Messaging, Storage, Users } from "node-appwrite";
+import { parseStringify } from "./utils";
 
 export async function createAdminClient() {
   const client = new Client()
@@ -23,3 +24,14 @@ export async function createAdminClient() {
     },
   };
 }
+
+export const getUser = async (userID: string) => {
+  const { users } = await createAdminClient();
+
+  try {
+    const user = await users.get(userID);
+    return parseStringify(user);
+  } catch (error) {
+    console.error(error);
+  }
+};

@@ -19,6 +19,9 @@ import Image from "next/image";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+
 interface Props {
   control: Control<FieldValues>;
   fieldType: FormFieldTypes;
@@ -31,7 +34,9 @@ interface Props {
   dateFormat?: string;
   showTimeSelect?: boolean;
   children?: React.ReactNode;
-  renderSkeleton?: (field: keyof FieldValues) => React.ReactNode;
+  renderSkeleton?: (
+    field: ControllerRenderProps<FieldValues>,
+  ) => React.ReactNode;
 }
 
 const CustomFormField = (props: Props) => {
@@ -76,7 +81,14 @@ CustomFormField.Input = function CustomFormFieldInput({
   field: ControllerRenderProps<FieldValues>;
   props: Props;
 }) {
-  const { iconSrc, fieldType, iconAlt, placeholder } = props;
+  const {
+    iconSrc,
+    fieldType,
+    iconAlt,
+    placeholder,
+    showTimeSelect,
+    dateFormat,
+  } = props;
 
   switch (fieldType) {
     case FormFieldTypes.INPUT:
@@ -114,6 +126,31 @@ CustomFormField.Input = function CustomFormFieldInput({
           />
         </FormControl>
       );
+    case FormFieldTypes.DATE_PICKER:
+      return (
+        <div className="flex rounded-md border border-dark-500 bg-dark-400">
+          <Image
+            src="/assets/icons/calendar.svg"
+            alt="Calender"
+            width={24}
+            height={24}
+            className="ml-2 select-none aspect-square"
+            draggable="false"
+          />
+          <FormControl>
+            <DatePicker
+              selected={field.value ? new Date(field.value) : null}
+              onChange={(date) => field.onChange(date)}
+              dateFormat={dateFormat ?? "MM/dd/yyy"}
+              showTimeSelect={showTimeSelect ?? false}
+              timeInputLabel="Time: "
+              wrapperClassName="date-picker ml-2"
+            />
+          </FormControl>
+        </div>
+      );
+    case FormFieldTypes.SKELETON:
+      return <div></div>;
     default:
       break;
   }
