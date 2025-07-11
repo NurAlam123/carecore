@@ -55,10 +55,13 @@ export const registerPatient = async ({
     }
 
     const newPatient = await createDocument({
-      ...patient,
-      gender: gender.toLowerCase(),
-      identification_document_id: file?.file_id ? file.file_id : null,
-      identification_document_url: file?.url,
+      data: {
+        ...patient,
+        gender: gender.toLowerCase(),
+        identification_document_id: file?.file_id ? file.file_id : null,
+        identification_document_url: file?.url,
+      },
+      collection: "patient",
     });
 
     return parseStringify(newPatient);

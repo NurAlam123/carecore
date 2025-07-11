@@ -2,7 +2,6 @@ import Logo from "@/assets/logo";
 import RegisterForm from "@/components/forms/RegisterForm";
 import { getUser } from "@/lib/appwrite.config";
 import Image from "next/image";
-import Link from "next/link";
 
 interface Params {
   userID: string;
@@ -11,6 +10,7 @@ interface Params {
 interface Props {
   params: Promise<Params>;
 }
+
 const UserRegisterPage = async ({ params }: Props) => {
   const { userID } = await params;
 

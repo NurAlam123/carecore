@@ -6,6 +6,7 @@ import {
   ID,
   Messaging,
   Models,
+  Query,
   Storage,
   Users,
 } from "node-appwrite";
@@ -45,12 +46,47 @@ export const getUser = async (userID: string) => {
   }
 };
 
-export const createDocument = async (data: Partial<Models.Document>) => {
+export const getPatient = async (userID: string) => {
   const { database } = await createAdminClient();
+
+  try {
+    const patients = await database.listDocuments(
+      process.env.DATABASE_ID!,
+      process.env.PATIENT_COLLECTION_ID!,
+      [Query.equal("user_id", userID)],
+    );
+
+    return parseStringify(patients.documents[0]);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const createDocument = async ({
+  data,
+  collection,
+}: {
+  data: Partial<Models.Document>;
+  collection: "patient" | "appointment";
+}) => {
+  const { database } = await createAdminClient();
+
+  let collectionID;
+  switch (collection) {
+    case "patient":
+      collectionID = process.env.PATIENT_COLLECTION_ID!;
+      break;
+    case "appointment":
+      collectionID = process.env.APPOINTMENT_COLLECTION_ID!;
+      break;
+    default:
+      collectionID = process.env.PATIENT_COLLECTION_ID!;
+      break;
+  }
 
   const document = await database.createDocument(
     process.env.DATABASE_ID!,
-    process.env.PATIENT_COLLECTION_ID!,
+    collectionID!,
     ID.unique(),
     data,
   );
