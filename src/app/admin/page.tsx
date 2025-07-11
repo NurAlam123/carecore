@@ -1,8 +1,11 @@
 import Logo from "@/assets/logo";
 import StatCard from "@/components/StatCard";
+import { getRecentAppointmentList } from "@/lib/actions/appointment.action";
 import Link from "next/link";
 
-const AdminPage = () => {
+const AdminPage = async () => {
+  const appointments = await getRecentAppointmentList();
+
   return (
     <div className="mx-auto flex max-w-7xl flex-col space-y-14">
       <header className="admin-header">
@@ -24,19 +27,19 @@ const AdminPage = () => {
         <section className="admin-stat">
           <StatCard
             statType="appointments"
-            count={5}
+            count={appointments.ScheduledCount}
             label="Scheduled appointments"
             icon="/assets/icons/appointments.svg"
           />
           <StatCard
             statType="pending"
-            count={5}
+            count={appointments.pendingCount}
             label="Pending appointments"
             icon="/assets/icons/pending.svg"
           />
           <StatCard
             statType="cancelled"
-            count={5}
+            count={appointments.cancelledCount}
             label="Canelled appointments"
             icon="/assets/icons/cancelled.svg"
           />

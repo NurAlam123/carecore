@@ -6,9 +6,11 @@ import { InputFile } from "node-appwrite/file";
 import {
   createAdminClient,
   createDocument,
+  getDocumentList,
   uploadFileStorage,
 } from "../appwrite";
 import { parseStringify } from "../utils";
+import { Collection } from "@/constants";
 
 export const createUser = async (user: CreateUserParams) => {
   const { users } = await createAdminClient();
@@ -61,11 +63,20 @@ export const registerPatient = async ({
         identification_document_id: file?.file_id ? file.file_id : null,
         identification_document_url: file?.url,
       },
-      collection: "patient",
+      collection: Collection.PATIENT,
     });
 
     return parseStringify(newPatient);
   } catch (error) {
     console.error("An error occurred while creating a new patient:", error);
   }
+};
+
+export const getPatient = async (userID: string) => {
+  const patients = await getDocumentList({
+    query: [Query.equal("user_id", userID)],
+    collection: Collection.PATIENT,
+  });
+
+  return patients.documents[0];
 };

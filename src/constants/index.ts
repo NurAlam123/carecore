@@ -1,5 +1,10 @@
 import { RegisterFieldValues } from "@/schemas/RegisterFormSchema";
 
+export enum Collection {
+  PATIENT = "patient",
+  APPOINTMENT = "appointment",
+}
+
 export enum FormFieldTypes {
   INPUT = "input",
   PHONE_INPUT = "phoneInput",

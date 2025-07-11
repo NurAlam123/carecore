@@ -6,13 +6,12 @@ import {
   ID,
   Messaging,
   Models,
-  Query,
   Storage,
   Users,
 } from "node-appwrite";
 
 import { parseStringify } from "./utils";
-import { parse } from "path";
+import { Collection } from "@/constants";
 
 export async function createAdminClient() {
   const client = new Client()
@@ -36,6 +35,17 @@ export async function createAdminClient() {
   };
 }
 
+const getCollectionID = (ID: Collection) => {
+  switch (ID) {
+    case Collection.PATIENT:
+      return process.env.PATIENT_COLLECTION_ID!;
+    case Collection.APPOINTMENT:
+      return process.env.APPOINTMENT_COLLECTION_ID!;
+    default:
+      return process.env.PATIENT_COLLECTION_ID!;
+  }
+};
+
 export const getUser = async (userID: string) => {
   const { users } = await createAdminClient();
 
@@ -44,37 +54,55 @@ export const getUser = async (userID: string) => {
     return parseStringify(user);
   } catch (error) {
     console.error(error);
+    return;
   }
 };
 
-export const getPatient = async (userID: string) => {
+export const getDocument = async ({
+  documentID,
+  collection,
+}: {
+  documentID: string;
+  collection: Collection;
+}) => {
   const { database } = await createAdminClient();
-
   try {
-    const patients = await database.listDocuments(
+    const collectionID = getCollectionID(collection);
+
+    const document = await database.getDocument(
       process.env.DATABASE_ID!,
-      process.env.PATIENT_COLLECTION_ID!,
-      [Query.equal("user_id", userID)],
+      collectionID,
+      documentID,
     );
 
-    return parseStringify(patients.documents[0]);
+    return parseStringify(document);
   } catch (error) {
     console.error(error);
+    return;
   }
 };
 
-export const getAppointment = async (appointmentID: string) => {
+export const getDocumentList = async ({
+  query,
+  collection,
+}: {
+  query: string[];
+  collection: Collection;
+}) => {
   const { database } = await createAdminClient();
   try {
-    const appointment = await database.getDocument(
+    const collectionID = getCollectionID(collection);
+
+    const documents = await database.listDocuments(
       process.env.DATABASE_ID!,
-      process.env.APPOINTMENT_COLLECTION_ID!,
-      appointmentID,
+      collectionID,
+      query,
     );
 
-    return parseStringify(appointment);
+    return parseStringify(documents);
   } catch (error) {
     console.error(error);
+    return;
   }
 };
 
@@ -83,22 +111,11 @@ export const createDocument = async ({
   collection,
 }: {
   data: Partial<Models.Document>;
-  collection: "patient" | "appointment";
+  collection: Collection;
 }) => {
   const { database } = await createAdminClient();
 
-  let collectionID;
-  switch (collection) {
-    case "patient":
-      collectionID = process.env.PATIENT_COLLECTION_ID!;
-      break;
-    case "appointment":
-      collectionID = process.env.APPOINTMENT_COLLECTION_ID!;
-      break;
-    default:
-      collectionID = process.env.PATIENT_COLLECTION_ID!;
-      break;
-  }
+  const collectionID = getCollectionID(collection);
 
   const document = await database.createDocument(
     process.env.DATABASE_ID!,
