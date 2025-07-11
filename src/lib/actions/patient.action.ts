@@ -23,16 +23,19 @@ export const createUser = async (user: CreateUserParams) => {
       undefined,
       user.name,
     );
-    return newUser;
+    return { isNew: true, user: newUser };
   } catch (error) {
-    console.error(error);
+    // console.error(error);
     if (error instanceof AppwriteException) {
       if (error.code === 409) {
         const documents = await users.list([
           Query.equal("email", [user.email]),
         ]);
 
-        return documents.users[0];
+        return {
+          isNew: false,
+          user: documents.users[0],
+        };
       }
     }
   }
