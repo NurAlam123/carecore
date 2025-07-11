@@ -16,7 +16,11 @@ import {
   AppointmentFieldValuesTypeMap,
   getAppointmentSchema,
 } from "@/schemas/AppointmentSchema";
-import { createAppointment } from "@/lib/actions/appointment.action";
+import {
+  createAppointment,
+  updateAppointment,
+} from "@/lib/actions/appointment.action";
+import { Appointment } from "@/types/appwrite";
 
 type AppointmentStatusType = "create" | "cancel" | "schedule";
 
@@ -24,12 +28,16 @@ interface Props {
   userID: string;
   patientID: string;
   appointmentStatusType: AppointmentStatusType;
+  appointment?: Appointment;
+  setOpen?: (open: boolean) => void;
 }
 
 const AppointmentForm = ({
   userID,
   patientID,
   appointmentStatusType,
+  appointment,
+  setOpen,
 }: Props) => {
   const router = useRouter();
 
@@ -42,11 +50,14 @@ const AppointmentForm = ({
   const form = useForm<AppointmentFieldValuesTypeMap[AppointmentStatusType]>({
     resolver: zodResolver(AppointmentValidationSchema),
     defaultValues: {
-      primary_physician: "",
-      schedule: new Date(),
-      reason: "",
-      note: "",
-      cancellation_reason: "",
+      primary_physician: appointment ? appointment.primary_physician : "",
+      schedule: appointment ? new Date(appointment.schedule) : new Date(),
+      reason: appointment ? appointment.reason : "",
+      note: appointment ? appointment.note : "",
+      cancellation_reason:
+        appointment && appointment.cancellation_reason
+          ? appointment.cancellation_reason
+          : "",
     },
   });
 
@@ -80,6 +91,7 @@ const AppointmentForm = ({
           note: values.note,
           status: status as Status,
         } satisfies CreateAppointmentParams;
+
         const appointment = await createAppointment(appointmentData);
 
         if (appointment) {
@@ -90,6 +102,24 @@ const AppointmentForm = ({
         }
 
         setIsLoading(false);
+      } else {
+        const appointmentToUpdate = {
+          user_id: userID,
+          appointment_id: appointment?.$id as string,
+          appointment: {
+            primary_physician: values.primary_physician,
+            schedule: new Date(values.schedule),
+            status: status as Status,
+            cancellation_reason: values.cancellation_reason,
+          },
+          type: appointmentStatusType,
+        } satisfies UpdateAppointmentParams;
+
+        const updatedAppointment = await updateAppointment(appointmentToUpdate);
+        if (updatedAppointment) {
+          if (setOpen) setOpen(false);
+          form.reset();
+        }
       }
     } catch (error) {
       console.error(error);
@@ -115,12 +145,14 @@ const AppointmentForm = ({
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 flex-1">
-        <section className="mb-12 space-y-4">
-          <h1 className="header">New Appointment</h1>
-          <p className="text-dark-700">
-            Request a new appointment in 10 seconds
-          </p>
-        </section>
+        {appointmentStatusType === "create" && (
+          <section className="mb-12 space-y-4">
+            <h1 className="header">New Appointment</h1>
+            <p className="text-dark-700">
+              Request a new appointment in 10 seconds
+            </p>
+          </section>
+        )}
 
         {appointmentStatusType !== "cancel" && (
           <>

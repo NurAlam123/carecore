@@ -1,10 +1,16 @@
 "use server";
 
 import { Query } from "node-appwrite";
-import { createDocument, getDocument, getDocumentList } from "../appwrite";
+import {
+  createDocument,
+  getDocument,
+  getDocumentList,
+  updateDocument,
+} from "../appwrite";
 import { parseStringify } from "../utils";
 import { Appointment } from "@/types/appwrite";
 import { Collection } from "@/constants";
+import { revalidatePath } from "next/cache";
 
 export const createAppointment = async (
   appointmentData: CreateAppointmentParams,
@@ -66,4 +72,23 @@ export const getRecentAppointmentList = async () => {
   };
 
   return parseStringify(data);
+};
+
+export const updateAppointment = async ({
+  appointment_id: appointmentID,
+  // userID,
+  appointment,
+  // type,
+}: UpdateAppointmentParams) => {
+  const updatedAppointment = await updateDocument({
+    collection: Collection.APPOINTMENT,
+    documentID: appointmentID,
+    data: appointment,
+  });
+
+  if (!updatedAppointment) return;
+  // sms
+
+  revalidatePath("/admin");
+  return updateDocument;
 };

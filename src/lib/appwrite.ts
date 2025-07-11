@@ -126,6 +126,36 @@ export const createDocument = async ({
 
   return document;
 };
+export const updateDocument = async ({
+  data,
+  documentID,
+  collection,
+}: {
+  documentID: string;
+  data: Partial<Models.Document>;
+  collection: Collection;
+}) => {
+  const { database } = await createAdminClient();
+  try {
+    const collectionID = getCollectionID(collection);
+
+    const updatedDocument = await database.updateDocument(
+      process.env.DATABASE_ID!,
+      collectionID!,
+      documentID,
+      data,
+    );
+
+    if (!updatedDocument) {
+      throw new Error("Appointment not found");
+    }
+
+    return parseStringify(updatedDocument);
+  } catch (error) {
+    console.error(error);
+    return;
+  }
+};
 
 export const uploadFileStorage = async (inputFile: File) => {
   const { storage } = await createAdminClient();
