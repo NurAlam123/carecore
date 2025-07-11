@@ -1,11 +1,21 @@
 import Logo from "@/assets/logo";
 import PatientForm from "@/components/forms/PatientForm";
+import PasskeyModal from "@/components/PasskeyModal";
 import Image from "next/image";
 import Link from "next/link";
 
-export default function Home() {
+export default async function Home({
+  searchParams,
+}: {
+  searchParams: Promise<{ admin: string }>;
+}) {
+  const query = await searchParams;
+  const isAdmin = query.admin === "true";
+
   return (
     <div className="flex h-screen max-h-screen">
+      {isAdmin && <PasskeyModal isOpen={isAdmin} />}
+
       <section className="remove-scrollbar container my-auto">
         <div className="sub-container max-w-[496px]">
           <Logo />
