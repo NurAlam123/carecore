@@ -29,7 +29,7 @@ const AdminPage = async () => {
         <section className="admin-stat">
           <StatCard
             statType="appointments"
-            count={appointments.ScheduledCount}
+            count={appointments.scheduledCount}
             label="Scheduled appointments"
             icon="/assets/icons/appointments.svg"
           />

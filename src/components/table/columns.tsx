@@ -8,6 +8,7 @@ import { formatDateTime } from "@/lib/utils";
 import { Appointment } from "@/types/appwrite";
 import StatusBadge from "../StatusBadge";
 import { AppointmentModal } from "../AppointmentModal";
+import PatientDetails from "../PatientDetails";
 
 export const columns: ColumnDef<Appointment>[] = [
   {
@@ -21,7 +22,7 @@ export const columns: ColumnDef<Appointment>[] = [
     header: "Patient",
     cell: ({ row }) => {
       const appointment = row.original;
-      return <p className="text-medium-[14]">{appointment.patient.name}</p>;
+      return <PatientDetails patient={appointment.patient} />;
     },
   },
   {
