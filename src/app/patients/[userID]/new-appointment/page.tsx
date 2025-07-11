@@ -1,6 +1,6 @@
 import Logo from "@/assets/logo";
 import AppointmentForm from "@/components/forms/AppointmentForm";
-import { getPatient } from "@/lib/appwrite.config";
+import { getPatient } from "@/lib/appwrite";
 import Image from "next/image";
 
 interface Params {

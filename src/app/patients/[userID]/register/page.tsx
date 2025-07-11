@@ -1,6 +1,6 @@
 import Logo from "@/assets/logo";
 import RegisterForm from "@/components/forms/RegisterForm";
-import { getUser } from "@/lib/appwrite.config";
+import { getUser } from "@/lib/appwrite";
 import Image from "next/image";
 
 interface Params {

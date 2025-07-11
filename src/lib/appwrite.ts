@@ -12,6 +12,7 @@ import {
 } from "node-appwrite";
 
 import { parseStringify } from "./utils";
+import { parse } from "path";
 
 export async function createAdminClient() {
   const client = new Client()
@@ -57,6 +58,21 @@ export const getPatient = async (userID: string) => {
     );
 
     return parseStringify(patients.documents[0]);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const getAppointment = async (appointmentID: string) => {
+  const { database } = await createAdminClient();
+  try {
+    const appointment = await database.getDocument(
+      process.env.DATABASE_ID!,
+      process.env.APPOINTMENT_COLLECTION_ID!,
+      appointmentID,
+    );
+
+    return parseStringify(appointment);
   } catch (error) {
     console.error(error);
   }

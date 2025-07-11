@@ -1,6 +1,6 @@
 "use server";
 
-import { createDocument } from "../appwrite.config";
+import { createDocument } from "../appwrite";
 import { parseStringify } from "../utils";
 
 export const createAppointment = async (

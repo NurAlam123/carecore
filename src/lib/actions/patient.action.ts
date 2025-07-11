@@ -7,7 +7,7 @@ import {
   createAdminClient,
   createDocument,
   uploadFileStorage,
-} from "../appwrite.config";
+} from "../appwrite";
 import { parseStringify } from "../utils";
 
 export const createUser = async (user: CreateUserParams) => {
