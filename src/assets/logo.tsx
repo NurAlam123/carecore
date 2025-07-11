@@ -2,7 +2,7 @@ import Image from "next/image";
 
 const Logo = () => {
   return (
-    <div className="flex items-center mb-12 select-none">
+    <div className="flex items-center select-none">
       <Image
         src="/logo.svg"
         alt="Logo"

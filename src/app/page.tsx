@@ -14,11 +14,13 @@ export default async function Home({
 
   return (
     <div className="flex h-screen max-h-screen">
-      {isAdmin && <PasskeyModal isOpen={isAdmin} />}
+      {isAdmin && <PasskeyModal />}
 
       <section className="remove-scrollbar container my-auto">
         <div className="sub-container max-w-[496px]">
-          <Logo />
+          <div className="mb-12">
+            <Logo />
+          </div>
 
           <PatientForm />
 
