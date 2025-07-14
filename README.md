@@ -1,36 +1,97 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# CareCore
+
+> **A modern healthcare management system**
+
+![CareCore](./public/carecore.png)
+![CareCore Admin](./public/carecore_admin.png)
+
+**CareCore** is a modern, streamlined healthcare management system designed for clinics and hospitals to manage patient appointments efficiently and effortlessly.
+
+🌐 [Try CareCore Live](https://carecore-mocha.vercel.app/)
+
+---
+
+## Features
+
+### Patient Side
+
+- Users must register with their name, email, and phone number.
+- New users are required to submit all the necessary medical information.
+- Patients can schedule new appointments.
+- **SMS Notification System**: Get real-time updates about appointments via SMS.
+
+### 🔐 Admin Dashboard
+
+- Secure access with a passkey.
+- Modern dashboard with quick insights.
+- Detailed appointment table:
+  - Patient details
+  - Appointment time
+  - Assigned doctor
+
+## Tech Stack
+
+- [Next.js](https://nextjs.org/)
+- [Tailwind CSS ](https://tailwindcss.com/)
+- [ShadCN UI](https://ui.shadcn.com/)
+- [Appwrite](https://appwrite.io/)
+- [Twilio](https://www.twilio.com/)
 
 ## Getting Started
 
-First, run the development server:
+> Clone the project and install dependencies.
+
+```bash
+git clone https://github.com/nuralam123/carecore.git
+cd carecore
+npm install
+```
+
+> Set up environment variables
+
+Create a `.env.local` file with required keys
+
+```
+## Appwrite
+APPWRITE_PROJECT_ID=
+APPWRITE_API_KEY=
+
+## Appwrite Database
+DATABASE_ID=
+PATIENT_COLLECTION_ID=
+DOCTOR_COLLECTION_ID=
+APPOINTMENT_COLLECTION_ID=
+
+## Appwrite Storage
+NEXT_PUBLIC_BUCKET_ID=
+
+## Appwrite Endpoint
+NEXT_PUBLIC_ENDPOINT=
+
+## Admin Passkey
+NEXT_PUBLIC_ADMIN_PASSKEY=
+```
+
+Also, go to the **Messaging** section in appwrite console, then `Providers > Create new provider > SMS`
+Fill up the required details and click create.
+
+> Run the app locally.
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Visit `http://localhost:3000`
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## License
 
-## Learn More
+This project is under [MIT LICENSE](./LICENSE)
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Acknowledgements
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- This project was originally showcased at [JavaScript Mastery - YouTube](https://www.youtube.com/@javascriptmastery)
+- Tutorial video: [Build and Deploy a Patient Management System with Next.js | Twilio, TypeScript, TailwindCSS - YouTube](https://youtu.be/lEflo_sc82g)
