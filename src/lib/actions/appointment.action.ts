@@ -5,9 +5,10 @@ import {
   createDocument,
   getDocument,
   getDocumentList,
+  sendSMS,
   updateDocument,
 } from "../appwrite";
-import { parseStringify } from "../utils";
+import { formatDateTime, parseStringify } from "../utils";
 import { Appointment } from "@/types/appwrite";
 import { Collection } from "@/constants";
 import { revalidatePath } from "next/cache";
@@ -76,9 +77,9 @@ export const getRecentAppointmentList = async () => {
 
 export const updateAppointment = async ({
   appointment_id: appointmentID,
-  // userID,
+  user_id: userID,
   appointment,
-  // type,
+  type,
 }: UpdateAppointmentParams) => {
   const updatedAppointment = await updateDocument({
     collection: Collection.APPOINTMENT,
@@ -88,6 +89,16 @@ export const updateAppointment = async ({
 
   if (!updatedAppointment) return;
   // sms
+  const sms = `
+    Hi, it's CareCore.
+    ${
+      type === "schedule"
+        ? `Your appointment has been scheduled for ${formatDateTime(appointment.schedule!).dateTime} with Dr. ${appointment.primary_physician}`
+        : `We regret to inform you that your appointment has been cancelled for the following reason ${appointment.cancelled_reason}`
+    }
+  `;
+
+  await sendSMS({ userID, content: sms });
 
   revalidatePath("/admin");
   return updateDocument;

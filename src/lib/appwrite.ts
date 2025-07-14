@@ -174,3 +174,27 @@ export const uploadFileStorage = async (inputFile: File) => {
       : null,
   };
 };
+
+export const sendSMS = async ({
+  content,
+  userID,
+}: {
+  content: string;
+  userID: string;
+}) => {
+  const { messaging } = await createAdminClient();
+
+  try {
+    const message = await messaging.createSms(
+      ID.unique(),
+      content,
+      [],
+      [userID],
+    );
+
+    return parseStringify(message);
+  } catch (error) {
+    console.error(error);
+    return;
+  }
+};
