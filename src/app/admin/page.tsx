@@ -9,6 +9,8 @@ export const metadata = {
   title: "CareCore - Admin",
 };
 
+export const dynamic = "force-dynamic";
+
 const AdminPage = async () => {
   const appointments = await getRecentAppointmentList();
 
