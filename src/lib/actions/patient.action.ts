@@ -11,6 +11,7 @@ import {
 } from "../appwrite";
 import { parseStringify } from "../utils";
 import { Collection } from "@/constants";
+import { CreateUserParams, RegisterUserParams } from "@/types";
 
 export const createUser = async (user: CreateUserParams) => {
   const { users } = await createAdminClient();

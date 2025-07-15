@@ -21,6 +21,11 @@ import {
   updateAppointment,
 } from "@/lib/actions/appointment.action";
 import { Appointment } from "@/types/appwrite";
+import {
+  CreateAppointmentParams,
+  Status,
+  UpdateAppointmentParams,
+} from "@/types";
 
 type AppointmentStatusType = "create" | "cancel" | "schedule";
 
@@ -110,7 +115,7 @@ const AppointmentForm = ({
             primary_physician: values.primary_physician,
             schedule: new Date(values.schedule),
             status: status as Status,
-            cancellation_reason: values.cancellation_reason,
+            cancellation_reason: values.cancellation_reason as string,
           },
           type: appointmentStatusType,
         } satisfies UpdateAppointmentParams;

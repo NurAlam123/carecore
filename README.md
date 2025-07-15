@@ -20,7 +20,7 @@
 - Patients can schedule new appointments.
 - **SMS Notification System**: Get real-time updates about appointments via SMS.
 
-### 🔐 Admin Dashboard
+### Admin Dashboard
 
 - Secure access with a passkey.
 - Modern dashboard with quick insights.

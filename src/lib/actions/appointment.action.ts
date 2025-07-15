@@ -12,6 +12,7 @@ import { formatDateTime, parseStringify } from "../utils";
 import { Appointment } from "@/types/appwrite";
 import { Collection } from "@/constants";
 import { revalidatePath } from "next/cache";
+import { CreateAppointmentParams, UpdateAppointmentParams } from "@/types";
 
 export const createAppointment = async (
   appointmentData: CreateAppointmentParams,
@@ -94,7 +95,7 @@ export const updateAppointment = async ({
     ${
       type === "schedule"
         ? `Your appointment has been scheduled for ${formatDateTime(appointment.schedule!).dateTime} with Dr. ${appointment.primary_physician}`
-        : `We regret to inform you that your appointment has been cancelled for the following reason ${appointment.cancelled_reason}`
+        : `We regret to inform you that your appointment has been cancelled for the following reason ${appointment.cancellation_reason}`
     }
   `;
 

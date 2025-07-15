@@ -1,4 +1,5 @@
 import { Models } from "node-appwrite";
+import { Gender } from ".";
 
 export interface Patient extends Models.Document {
   user_id: string;

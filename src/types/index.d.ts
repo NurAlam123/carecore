@@ -1,3 +1,5 @@
+import { Appointment } from "./appwrite";
+
 declare type SearchParamProps = {
   params: { [key: string]: string };
   searchParams: { [key: string]: string | string[] | undefined };
@@ -51,6 +53,6 @@ declare type CreateAppointmentParams = {
 declare type UpdateAppointmentParams = {
   appointment_id: string;
   user_id: string;
-  appointment: Appointment;
+  appointment: Partial<Appointment>;
   type: string;
 };

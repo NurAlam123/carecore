@@ -1,5 +1,6 @@
 import { StatusIcon } from "@/constants";
 import { cn } from "@/lib/utils";
+import { Status } from "@/types";
 import Image from "next/image";
 
 interface Props {

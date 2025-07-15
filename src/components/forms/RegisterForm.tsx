@@ -25,6 +25,7 @@ import {
   RegisterFormSchema,
 } from "@/schemas/RegisterFormSchema";
 import { registerPatient } from "@/lib/actions/patient.action";
+import { User } from "@/types";
 
 interface Props {
   user: User;
