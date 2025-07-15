@@ -5,6 +5,10 @@ import { DataTable } from "@/components/table/DataTable";
 import { getRecentAppointmentList } from "@/lib/actions/appointment.action";
 import Link from "next/link";
 
+export const metadata = {
+  title: "CareCore - Admin",
+};
+
 const AdminPage = async () => {
   const appointments = await getRecentAppointmentList();
 
